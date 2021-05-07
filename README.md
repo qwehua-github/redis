@@ -71,3 +71,39 @@
   3. ##### Reply Helpers
 
      相当于类型断言.根据使用的具体数据类型,选择调用
+  
+  ---
+  
+  代码实现
+  
+  ```go
+  package main
+  
+  import (
+  	"fmt"
+  	"github.com/gomodule/redigo/redis"
+  )
+  
+  func main() {
+  	//1.链接数据库
+  	conn, err := redis.Dial("tcp", "127.0.0.1:6380")
+  	if err != nil {
+  		fmt.Println("redis.Dial() err", err)
+  		return
+  	}
+  	defer conn.Close()
+  	//2.操作数据库
+  	reply, err := conn.Do("set", "itcast", "itheima")
+  	if err != nil {
+  		fmt.Println("conn.Do() err:", err)
+  		return
+  	}
+  
+  	//3.回复助手类函数.断言类型
+  	r, e := redis.String(reply, err)
+  	fmt.Println(r, e)
+  }
+  ```
+  
+  
+
